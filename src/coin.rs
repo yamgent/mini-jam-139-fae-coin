@@ -18,11 +18,15 @@ impl Plugin for CoinPlugin {
 #[derive(Component)]
 pub struct Coin {
     pub speed: f32,
+    pub additional_boosts: i32,
 }
 
 impl Default for Coin {
     fn default() -> Self {
-        Self { speed: 0.0 }
+        Self {
+            speed: 0.0,
+            additional_boosts: 3,
+        }
     }
 }
 
@@ -64,7 +68,10 @@ fn setup_coin(mut commands: Commands) {
             },
             ..Default::default()
         },
-        Coin { speed: 1400.0 },
+        Coin {
+            speed: 1400.0,
+            additional_boosts: 3,
+        },
         CoinAnimation::default(),
     ));
 }

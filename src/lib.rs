@@ -1,3 +1,4 @@
+mod boost_item;
 mod cloud;
 mod coin;
 mod coin_camera;
@@ -6,6 +7,7 @@ mod level;
 mod physics;
 
 use bevy::prelude::*;
+use boost_item::BoostItemPlugin;
 use cloud::CloudPlugin;
 use coin::CoinPlugin;
 use coin_camera::CoinCameraPlugin;
@@ -23,6 +25,7 @@ pub fn run() {
             CloudPlugin,
             LevelPlugin,
             IngameUiPlugin,
+            BoostItemPlugin,
         ))
         .run();
 }
