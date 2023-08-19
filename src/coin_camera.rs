@@ -29,13 +29,7 @@ fn pan_camera_with_coin_speed(
     let coin = coin_query.single();
     let mut camera_transform = camera_query.single_mut();
 
-    let target_y = if coin.speed > 20.0 {
-        CAMERA_PAN_Y_DIST
-    } else if coin.speed > -20.0 {
-        0.0
-    } else {
-        -CAMERA_PAN_Y_DIST
-    };
+    let target_y = CAMERA_PAN_Y_DIST - coin.speed.min(0.0);
 
     let dist = target_y - camera_transform.translation.y;
 
