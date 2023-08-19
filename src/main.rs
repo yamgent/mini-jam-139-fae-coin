@@ -1,3 +1,5 @@
+use mini_jam_139_fae_coin;
+
 fn main() {
-    println!("Hello, world!");
+    mini_jam_139_fae_coin::run();
 }
