@@ -6,8 +6,15 @@ pub struct IngameUiPlugin;
 
 impl Plugin for IngameUiPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_ingame_ui)
-            .add_systems(Update, (update_speed_ui, update_additional_boosts_ui));
+        app.add_systems(Startup, setup_ingame_ui).add_systems(
+            Update,
+            (
+                update_speed_ui,
+                update_additional_boosts_ui,
+                update_highest_altitude_ui,
+                update_altitude_ui,
+            ),
+        );
     }
 }
 
@@ -16,6 +23,12 @@ pub struct SpeedUi;
 
 #[derive(Component)]
 pub struct AdditionalBoostsUi;
+
+#[derive(Component)]
+pub struct HighestAltitudeUi;
+
+#[derive(Component)]
+pub struct AltitudeUi;
 
 fn setup_ingame_ui(mut commands: Commands) {
     commands.spawn((
@@ -47,6 +60,42 @@ fn setup_ingame_ui(mut commands: Commands) {
         }),
         AdditionalBoostsUi,
     ));
+
+    commands.spawn((
+        TextBundle::from_section(
+            "Highest Altitude: 0m",
+            TextStyle {
+                font_size: 32.0,
+                color: Color::GREEN,
+                ..Default::default()
+            },
+        )
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            top: Val::Px(128.0),
+            left: Val::Px(0.0),
+            ..Default::default()
+        }),
+        HighestAltitudeUi,
+    ));
+
+    commands.spawn((
+        TextBundle::from_section(
+            "Altitude: 0.0m",
+            TextStyle {
+                font_size: 32.0,
+                color: Color::GREEN,
+                ..Default::default()
+            },
+        )
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            top: Val::Px(128.0 + 32.0),
+            left: Val::Px(0.0),
+            ..Default::default()
+        }),
+        AltitudeUi,
+    ));
 }
 
 fn update_speed_ui(coin_query: Query<&Coin>, mut query: Query<&mut Text, With<SpeedUi>>) {
@@ -63,5 +112,25 @@ fn update_additional_boosts_ui(
     let coin = coin_query.single();
     query.for_each_mut(|mut text| {
         text.sections[0].value = format!("Boosts Remaining: {}", coin.additional_boosts);
+    });
+}
+
+fn update_highest_altitude_ui(
+    coin_query: Query<&Coin>,
+    mut query: Query<&mut Text, With<HighestAltitudeUi>>,
+) {
+    let coin = coin_query.single();
+    query.for_each_mut(|mut text| {
+        text.sections[0].value = format!(
+            "Highest Altitude: {}m",
+            (coin.highest_altitude_recorded.floor() as i32) / 10
+        );
+    });
+}
+
+fn update_altitude_ui(coin_query: Query<&Coin>, mut query: Query<&mut Text, With<AltitudeUi>>) {
+    let coin = coin_query.single();
+    query.for_each_mut(|mut text| {
+        text.sections[0].value = format!("Altitude: {:.3}m", coin.altitude / 10.0);
     });
 }

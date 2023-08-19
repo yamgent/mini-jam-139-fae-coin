@@ -11,6 +11,7 @@ impl Plugin for CoinPlugin {
                 do_coin_flip_animation,
                 handle_coin_adjustments,
                 handle_coin_use_boost,
+                calculate_altitude,
             ),
         );
     }
@@ -20,6 +21,8 @@ impl Plugin for CoinPlugin {
 pub struct Coin {
     pub speed: f32,
     pub additional_boosts: i32,
+    pub altitude: f32,
+    pub highest_altitude_recorded: f32,
 }
 
 impl Default for Coin {
@@ -27,6 +30,8 @@ impl Default for Coin {
         Self {
             speed: 0.0,
             additional_boosts: 3,
+            altitude: 0.0,
+            highest_altitude_recorded: 0.0,
         }
     }
 }
@@ -72,6 +77,8 @@ fn setup_coin(mut commands: Commands) {
         Coin {
             speed: 1400.0,
             additional_boosts: 3,
+            altitude: 0.0,
+            highest_altitude_recorded: 0.0,
         },
         CoinAnimation::default(),
     ));
@@ -163,5 +170,12 @@ fn handle_coin_use_boost(keyboard: Res<Input<KeyCode>>, mut query: Query<&mut Co
 
         coin.additional_boosts -= 1;
         coin.speed += COIN_MANUAL_BOOST_SPEED_GAIN;
+    });
+}
+
+fn calculate_altitude(time: Res<Time>, mut query: Query<&mut Coin>) {
+    query.for_each_mut(|mut coin| {
+        coin.altitude += coin.speed * time.delta_seconds();
+        coin.highest_altitude_recorded = coin.highest_altitude_recorded.max(coin.altitude);
     });
 }
