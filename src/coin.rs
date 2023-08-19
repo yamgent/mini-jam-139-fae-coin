@@ -10,6 +10,7 @@ impl Plugin for CoinPlugin {
                 handle_coin_gravity,
                 do_coin_flip_animation,
                 handle_coin_adjustments,
+                handle_coin_use_boost,
             ),
         );
     }
@@ -145,5 +146,22 @@ fn handle_coin_adjustments(
         transform.translation.x += direction * COIN_ADJUSTMENT_X_SPEED * time.delta_seconds();
         transform.translation.x = transform.translation.x.max(-COIN_X_BOUND).min(COIN_X_BOUND);
         coin.speed -= COIN_ADJUSTMENT_Y_SPEED_PENALTY * time.delta_seconds();
+    });
+}
+
+const COIN_MANUAL_BOOST_SPEED_GAIN: f32 = 400.0;
+
+fn handle_coin_use_boost(keyboard: Res<Input<KeyCode>>, mut query: Query<&mut Coin>) {
+    if !keyboard.just_pressed(KeyCode::Space) {
+        return;
+    }
+
+    query.for_each_mut(|mut coin| {
+        if coin.additional_boosts <= 0 {
+            return;
+        }
+
+        coin.additional_boosts -= 1;
+        coin.speed += COIN_MANUAL_BOOST_SPEED_GAIN;
     });
 }
