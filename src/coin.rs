@@ -149,7 +149,7 @@ fn handle_coin_adjustments(
     });
 }
 
-const COIN_MANUAL_BOOST_SPEED_GAIN: f32 = 400.0;
+const COIN_MANUAL_BOOST_SPEED_GAIN: f32 = 200.0;
 
 fn handle_coin_use_boost(keyboard: Res<Input<KeyCode>>, mut query: Query<&mut Coin>) {
     if !keyboard.just_pressed(KeyCode::Space) {
