@@ -4,14 +4,20 @@ pub struct CoinPlugin;
 
 impl Plugin for CoinPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_coin)
-            .add_systems(Update, (coin_gravity, coin_flip_animation));
+        app.add_systems(Startup, setup_coin).add_systems(
+            Update,
+            (
+                handle_coin_gravity,
+                do_coin_flip_animation,
+                handle_coin_adjustments,
+            ),
+        );
     }
 }
 
 #[derive(Component)]
 pub struct Coin {
-    speed: f32,
+    pub speed: f32,
 }
 
 impl Default for Coin {
@@ -54,7 +60,7 @@ fn setup_coin(mut commands: Commands) {
     ));
 }
 
-fn coin_gravity(time: Res<Time>, mut query: Query<&mut Coin>) {
+fn handle_coin_gravity(time: Res<Time>, mut query: Query<&mut Coin>) {
     query.for_each_mut(|mut coin| {
         coin.speed += -GRAVITY * time.delta_seconds();
     });
@@ -64,7 +70,7 @@ const COIN_ANIM_MAX_COIN_SPEED_CAP: f32 = 240.0;
 const COIN_ANIM_MIN_COIN_SPEED_CAP: f32 = 10.0;
 const COIN_ANIM_MAX_SPIN_SPEED: f32 = 15.0;
 
-fn coin_flip_animation(
+fn do_coin_flip_animation(
     time: Res<Time>,
     mut query: Query<(&mut CoinAnimation, &mut Sprite, &Coin)>,
 ) {
@@ -97,5 +103,31 @@ fn coin_flip_animation(
                 COIN_FULL_SIZE.y * anim.orientation,
             ));
         }
+    });
+}
+
+const COIN_ADJUSTMENT_X_SPEED: f32 = 150.0;
+const COIN_ADJUSTMENT_Y_SPEED_PENALTY: f32 = 20.0;
+// TODO: Related to screen bounds?
+const COIN_X_BOUND: f32 = 200.0;
+
+fn handle_coin_adjustments(
+    time: Res<Time>,
+    keyboard: Res<Input<KeyCode>>,
+    mut query: Query<(&mut Transform, &mut Coin)>,
+) {
+    let left_pressed = keyboard.pressed(KeyCode::Left);
+    let right_pressed = keyboard.pressed(KeyCode::Right);
+
+    if left_pressed == right_pressed {
+        return;
+    }
+
+    let direction = if left_pressed { -1.0 } else { 1.0 };
+
+    query.for_each_mut(|(mut transform, mut coin)| {
+        transform.translation.x += direction * COIN_ADJUSTMENT_X_SPEED * time.delta_seconds();
+        transform.translation.x = transform.translation.x.max(-COIN_X_BOUND).min(COIN_X_BOUND);
+        coin.speed -= COIN_ADJUSTMENT_Y_SPEED_PENALTY * time.delta_seconds();
     });
 }

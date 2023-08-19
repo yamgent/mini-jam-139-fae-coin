@@ -1,16 +1,12 @@
 mod coin;
+mod coin_camera;
 
 use bevy::prelude::*;
 use coin::CoinPlugin;
-
-fn setup(mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
-}
+use coin_camera::CoinCameraPlugin;
 
 pub fn run() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        .add_plugins(CoinPlugin)
-        .add_systems(Startup, setup)
+        .add_plugins((DefaultPlugins, CoinPlugin, CoinCameraPlugin))
         .run();
 }
