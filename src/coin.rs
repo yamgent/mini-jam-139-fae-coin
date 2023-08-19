@@ -26,6 +26,15 @@ impl Default for Coin {
     }
 }
 
+impl Coin {
+    pub fn get_bounds(transform: &Transform) -> Rect {
+        Rect::from_center_size(
+            Vec2::new(transform.translation.x, transform.translation.y),
+            COIN_FULL_SIZE,
+        )
+    }
+}
+
 #[derive(Component)]
 pub struct CoinAnimation {
     orientation: f32,
@@ -41,7 +50,7 @@ impl Default for CoinAnimation {
     }
 }
 
-const GRAVITY: f32 = 9.8;
+const GRAVITY: f32 = 98.0;
 // TODO: Actual sprite and size
 const COIN_FULL_SIZE: Vec2 = Vec2::new(50.0, 50.0);
 
@@ -55,7 +64,7 @@ fn setup_coin(mut commands: Commands) {
             },
             ..Default::default()
         },
-        Coin { speed: 140.0 },
+        Coin { speed: 1400.0 },
         CoinAnimation::default(),
     ));
 }
@@ -66,8 +75,8 @@ fn handle_coin_gravity(time: Res<Time>, mut query: Query<&mut Coin>) {
     });
 }
 
-const COIN_ANIM_MAX_COIN_SPEED_CAP: f32 = 240.0;
-const COIN_ANIM_MIN_COIN_SPEED_CAP: f32 = 10.0;
+const COIN_ANIM_MAX_COIN_SPEED_CAP: f32 = 2400.0;
+const COIN_ANIM_MIN_COIN_SPEED_CAP: f32 = 100.0;
 const COIN_ANIM_MAX_SPIN_SPEED: f32 = 15.0;
 
 fn do_coin_flip_animation(
@@ -107,7 +116,7 @@ fn do_coin_flip_animation(
 }
 
 const COIN_ADJUSTMENT_X_SPEED: f32 = 150.0;
-const COIN_ADJUSTMENT_Y_SPEED_PENALTY: f32 = 20.0;
+const COIN_ADJUSTMENT_Y_SPEED_PENALTY: f32 = 200.0;
 // TODO: Related to screen bounds?
 const COIN_X_BOUND: f32 = 200.0;
 
