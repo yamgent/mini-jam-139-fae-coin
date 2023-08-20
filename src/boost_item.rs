@@ -1,8 +1,10 @@
 use bevy::prelude::*;
 
 use crate::{
+    anim::AnimScale,
     app_state::{AppState, StateOwner},
     coin::Coin,
+    game_assets::TextureAssets,
     physics::RelativeCoinY,
 };
 
@@ -34,23 +36,24 @@ impl BoostItem {
     }
 }
 
-fn init_boost_items(mut commands: Commands, query: Query<(&InitBoostItem, Entity)>) {
+fn init_boost_items(
+    mut commands: Commands,
+    query: Query<(&InitBoostItem, Entity)>,
+    texture_assets: Res<TextureAssets>,
+) {
     query.for_each(|(init_item, init_item_entity)| {
         let pos = Vec3::new(init_item.0.x, init_item.0.y, 0.0);
 
         commands.get_entity(init_item_entity).unwrap().despawn();
         commands.spawn((
             SpriteBundle {
-                sprite: Sprite {
-                    color: Color::CYAN,
-                    custom_size: Some(BOOST_ITEM_SIZE),
-                    ..Default::default()
-                },
+                texture: texture_assets.texture_boost.clone(),
                 transform: Transform::from_translation(pos),
                 ..Default::default()
             },
             RelativeCoinY,
             BoostItem,
+            AnimScale::default(),
             StateOwner(AppState::Ingame),
         ));
     });

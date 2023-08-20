@@ -20,4 +20,10 @@ pub struct TextureAssets {
     pub texture_coin: Handle<Image>,
     #[asset(path = "textures/clouds.png")]
     pub texture_clouds: Handle<Image>,
+    #[asset(path = "textures/boost.png")]
+    pub texture_boost: Handle<Image>,
+    #[asset(path = "textures/fairy.png")]
+    pub texture_fairy: Handle<Image>,
+    #[asset(path = "textures/glow.png")]
+    pub texture_glow: Handle<Image>,
 }

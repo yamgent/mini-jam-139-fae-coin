@@ -1,3 +1,4 @@
+mod anim;
 mod app_state;
 mod base;
 mod boost_item;
@@ -15,6 +16,7 @@ mod main_menu_ui;
 mod physics;
 mod scores;
 
+use anim::AnimPlugin;
 use app_state::AppStatePlugin;
 use base::CorePlugin;
 use bevy::prelude::*;
@@ -45,6 +47,7 @@ pub fn run() {
             ),
             (
                 CoinLaunchUiPlugin,
+                AnimPlugin,
                 PhysicsPlugin,
                 CoinPlugin,
                 CoinCameraPlugin,
