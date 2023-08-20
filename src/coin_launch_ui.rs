@@ -2,7 +2,7 @@ use bevy::{core_pipeline::clear_color::ClearColorConfig, prelude::*};
 
 use crate::{
     app_state::{AppState, StateOwner},
-    game_assets::TextureAssets,
+    game_assets::{FontAssets, TextureAssets},
 };
 
 pub struct CoinLaunchUiPlugin;
@@ -38,7 +38,11 @@ const SPEED_INDICATOR_HEIGHT: f32 = 16.0;
 
 pub const SKY_COLOR: Color = Color::rgb(145.0 / 255.0, 142.0 / 255.0, 229.0 / 255.0);
 
-fn setup_coin_launch_ui(mut commands: Commands, texture_assets: Res<TextureAssets>) {
+fn setup_coin_launch_ui(
+    mut commands: Commands,
+    texture_assets: Res<TextureAssets>,
+    font_assets: Res<FontAssets>,
+) {
     commands.spawn((
         Camera2dBundle {
             camera_2d: Camera2d {
@@ -82,6 +86,25 @@ fn setup_coin_launch_ui(mut commands: Commands, texture_assets: Res<TextureAsset
         },
         SpeedIndicatorUi,
         UiImage::new(texture_assets.texture_launch_arrow.clone()),
+        StateOwner(AppState::CoinLaunch),
+    ));
+
+    commands.spawn((
+        TextBundle::from_section(
+            "[SPACE]: GO!",
+            TextStyle {
+                font: font_assets.font_fira.clone(),
+                font_size: 32.0,
+                color: Color::WHITE,
+                ..Default::default()
+            },
+        )
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            top: Val::Px(SPEED_BAR_TOP + SPEED_BAR_HEIGHT + 16.0),
+            right: Val::Px(32.0),
+            ..Default::default()
+        }),
         StateOwner(AppState::CoinLaunch),
     ));
 

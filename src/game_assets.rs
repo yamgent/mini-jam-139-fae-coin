@@ -10,8 +10,15 @@ impl Plugin for GameAssetsPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(ProgressPlugin::new(AppState::Loading).continue_to(AppState::MainMenu))
             .add_loading_state(LoadingState::new(AppState::Loading))
+            .add_collection_to_loading_state::<_, FontAssets>(AppState::Loading)
             .add_collection_to_loading_state::<_, TextureAssets>(AppState::Loading);
     }
+}
+
+#[derive(AssetCollection, Resource)]
+pub struct FontAssets {
+    #[asset(path = "fonts/FiraSans-Regular.ttf")]
+    pub font_fira: Handle<Font>,
 }
 
 #[derive(AssetCollection, Resource)]

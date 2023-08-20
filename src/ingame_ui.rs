@@ -3,6 +3,7 @@ use bevy::prelude::*;
 use crate::{
     app_state::{AppState, StateOwner},
     coin::Coin,
+    game_assets::FontAssets,
 };
 
 pub struct IngameUiPlugin;
@@ -35,16 +36,25 @@ pub struct HighestAltitudeUi;
 #[derive(Component)]
 pub struct AltitudeUi;
 
-fn setup_ingame_ui(mut commands: Commands) {
+pub const INGAME_TEXT_COLOR: Color = Color::GREEN;
+
+fn setup_ingame_ui(mut commands: Commands, font_assets: Res<FontAssets>) {
     commands.spawn((
         TextBundle::from_section(
             "Speed: 0",
             TextStyle {
+                font: font_assets.font_fira.clone(),
                 font_size: 32.0,
-                color: Color::GREEN,
+                color: INGAME_TEXT_COLOR,
                 ..Default::default()
             },
-        ),
+        )
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            top: Val::Px(96.0),
+            left: Val::Px(0.0),
+            ..Default::default()
+        }),
         SpeedUi,
         StateOwner(AppState::Ingame),
     ));
@@ -53,14 +63,15 @@ fn setup_ingame_ui(mut commands: Commands) {
         TextBundle::from_section(
             "Additional Boosts: 0",
             TextStyle {
+                font: font_assets.font_fira.clone(),
                 font_size: 32.0,
-                color: Color::GREEN,
+                color: INGAME_TEXT_COLOR,
                 ..Default::default()
             },
         )
         .with_style(Style {
             position_type: PositionType::Absolute,
-            top: Val::Px(32.0),
+            top: Val::Px(96.0 + 32.0),
             left: Val::Px(0.0),
             ..Default::default()
         }),
@@ -72,14 +83,15 @@ fn setup_ingame_ui(mut commands: Commands) {
         TextBundle::from_section(
             "Highest Altitude: 0m",
             TextStyle {
+                font: font_assets.font_fira.clone(),
                 font_size: 32.0,
-                color: Color::GREEN,
+                color: INGAME_TEXT_COLOR,
                 ..Default::default()
             },
         )
         .with_style(Style {
             position_type: PositionType::Absolute,
-            top: Val::Px(128.0),
+            top: Val::Px(0.0),
             left: Val::Px(0.0),
             ..Default::default()
         }),
@@ -91,14 +103,15 @@ fn setup_ingame_ui(mut commands: Commands) {
         TextBundle::from_section(
             "Altitude: 0.0m",
             TextStyle {
+                font: font_assets.font_fira.clone(),
                 font_size: 32.0,
-                color: Color::GREEN,
+                color: INGAME_TEXT_COLOR,
                 ..Default::default()
             },
         )
         .with_style(Style {
             position_type: PositionType::Absolute,
-            top: Val::Px(128.0 + 32.0),
+            top: Val::Px(32.0),
             left: Val::Px(0.0),
             ..Default::default()
         }),
