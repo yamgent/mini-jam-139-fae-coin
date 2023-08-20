@@ -78,6 +78,24 @@ fn setup_ingame_ui(mut commands: Commands, font_assets: Res<FontAssets>) {
         AdditionalBoostsUi,
         StateOwner(AppState::Ingame),
     ));
+    commands.spawn((
+        TextBundle::from_section(
+            "[SPACE]: Use boost",
+            TextStyle {
+                font: font_assets.font_fira.clone(),
+                font_size: 32.0,
+                color: Color::WHITE,
+                ..Default::default()
+            },
+        )
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            top: Val::Px(96.0 + 64.0),
+            left: Val::Px(0.0),
+            ..Default::default()
+        }),
+        StateOwner(AppState::Ingame),
+    ));
 
     commands.spawn((
         TextBundle::from_section(

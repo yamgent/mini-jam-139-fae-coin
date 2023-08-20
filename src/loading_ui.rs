@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{core_pipeline::clear_color::ClearColorConfig, prelude::*};
 use iyes_progress::ProgressCounter;
 
 use crate::app_state::{AppState, StateOwner};
@@ -19,7 +19,16 @@ impl Plugin for LoadingUiPlugin {
 struct LoadingTextUi;
 
 fn setup_loading_ui(mut commands: Commands) {
-    commands.spawn((Camera2dBundle::default(), StateOwner(AppState::Loading)));
+    commands.spawn((
+        Camera2dBundle {
+            camera_2d: Camera2d {
+                clear_color: ClearColorConfig::Custom(Color::BLACK),
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        StateOwner(AppState::Loading),
+    ));
 
     commands
         .spawn((
@@ -41,8 +50,8 @@ fn setup_loading_ui(mut commands: Commands) {
                 TextBundle::from_section(
                     "Loading: 0/0",
                     TextStyle {
-                        font_size: 32.0,
-                        color: Color::GREEN,
+                        font_size: 48.0,
+                        color: Color::WHITE,
                         ..Default::default()
                     },
                 ),

@@ -95,7 +95,7 @@ fn setup_coin_launch_ui(
             TextStyle {
                 font: font_assets.font_fira.clone(),
                 font_size: 32.0,
-                color: Color::WHITE,
+                color: Color::GREEN,
                 ..Default::default()
             },
         )

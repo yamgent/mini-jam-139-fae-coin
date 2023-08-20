@@ -40,4 +40,7 @@ pub struct TextureAssets {
     pub texture_launch_bar: Handle<Image>,
     #[asset(path = "textures/launch_arrow.png")]
     pub texture_launch_arrow: Handle<Image>,
+
+    #[asset(path = "textures/single_cloud.png")]
+    pub texture_single_cloud: Handle<Image>,
 }
