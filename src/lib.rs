@@ -1,4 +1,5 @@
 mod app_state;
+mod base;
 mod boost_item;
 mod cloud;
 mod coin;
@@ -14,6 +15,7 @@ mod physics;
 mod scores;
 
 use app_state::AppStatePlugin;
+use base::CorePlugin;
 use bevy::prelude::*;
 use boost_item::BoostItemPlugin;
 use cloud::CloudPlugin;
@@ -32,7 +34,7 @@ use scores::ScoresPlugin;
 pub fn run() {
     App::new()
         .add_plugins((
-            DefaultPlugins,
+            CorePlugin,
             AppStatePlugin,
             LoadingUiPlugin,
             MainMenuUiPlugin,
