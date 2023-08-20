@@ -18,4 +18,6 @@ impl Plugin for GameAssetsPlugin {
 pub struct TextureAssets {
     #[asset(path = "textures/coin.png")]
     pub texture_coin: Handle<Image>,
+    #[asset(path = "textures/clouds.png")]
+    pub texture_clouds: Handle<Image>,
 }

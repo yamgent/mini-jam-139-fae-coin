@@ -1,8 +1,10 @@
 use bevy::prelude::*;
+use rand::Rng;
 
 use crate::{
     app_state::{AppState, StateOwner},
     coin::Coin,
+    game_assets::TextureAssets,
     physics::RelativeCoinY,
 };
 
@@ -42,16 +44,43 @@ impl Cloud {
     }
 }
 
-fn init_clouds(mut commands: Commands, query: Query<(&InitCloud, Entity)>) {
+const CLOUD_SPRITE_TOTAL: i32 = 8;
+const CLOUD_SPRITE_PER_ROW_COUNT: i32 = 2;
+const CLOUD_SPRITE_SIZE: Vec2 = Vec2::new(128.0, 64.0);
+
+fn init_clouds(
+    mut commands: Commands,
+    query: Query<(&InitCloud, Entity)>,
+    texture_assets: Res<TextureAssets>,
+) {
+    if query.is_empty() {
+        return;
+    }
+
+    let mut rng = rand::thread_rng();
+
     query.for_each(|(init_cloud, init_cloud_entity)| {
         let pos = Vec3::new(init_cloud.0.x, init_cloud.0.y, 0.0);
+
+        let sprite_to_use = rng.gen_range(0..CLOUD_SPRITE_TOTAL);
+        let sprite_min = Vec2::new(
+            (sprite_to_use % CLOUD_SPRITE_PER_ROW_COUNT) as f32 * CLOUD_SPRITE_SIZE.x,
+            (sprite_to_use / CLOUD_SPRITE_PER_ROW_COUNT) as f32 * CLOUD_SPRITE_SIZE.y,
+        );
+        let sprite_max = Vec2::new(
+            sprite_min.x + CLOUD_SPRITE_SIZE.x,
+            sprite_min.y + CLOUD_SPRITE_SIZE.y,
+        );
 
         commands.get_entity(init_cloud_entity).unwrap().despawn();
         commands.spawn((
             SpriteBundle {
+                texture: texture_assets.texture_clouds.clone(),
                 sprite: Sprite {
-                    color: Color::WHITE,
-                    custom_size: Some(CLOUD_SIZE),
+                    rect: Some(Rect {
+                        min: sprite_min,
+                        max: sprite_max,
+                    }),
                     ..Default::default()
                 },
                 transform: Transform::from_translation(pos),
