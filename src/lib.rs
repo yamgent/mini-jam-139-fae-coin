@@ -1,3 +1,4 @@
+mod app_state;
 mod boost_item;
 mod cloud;
 mod coin;
@@ -7,6 +8,7 @@ mod ingame_ui;
 mod level;
 mod physics;
 
+use app_state::AppStatePlugin;
 use bevy::prelude::*;
 use boost_item::BoostItemPlugin;
 use cloud::CloudPlugin;
@@ -22,6 +24,7 @@ pub fn run() {
         .add_plugins((
             DefaultPlugins,
             PhysicsPlugin,
+            AppStatePlugin,
             CoinPlugin,
             CoinCameraPlugin,
             CloudPlugin,

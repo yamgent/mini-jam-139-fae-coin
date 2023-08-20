@@ -1,20 +1,25 @@
 use bevy::prelude::*;
 
-use crate::coin::Coin;
+use crate::{
+    app_state::{AppState, StateOwner},
+    coin::Coin,
+};
 
 pub struct IngameUiPlugin;
 
 impl Plugin for IngameUiPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_ingame_ui).add_systems(
-            Update,
-            (
-                update_speed_ui,
-                update_additional_boosts_ui,
-                update_highest_altitude_ui,
-                update_altitude_ui,
-            ),
-        );
+        app.add_systems(OnEnter(AppState::Ingame), setup_ingame_ui)
+            .add_systems(
+                Update,
+                (
+                    update_speed_ui,
+                    update_additional_boosts_ui,
+                    update_highest_altitude_ui,
+                    update_altitude_ui,
+                )
+                    .run_if(in_state(AppState::Ingame)),
+            );
     }
 }
 
@@ -41,6 +46,7 @@ fn setup_ingame_ui(mut commands: Commands) {
             },
         ),
         SpeedUi,
+        StateOwner(AppState::Ingame),
     ));
 
     commands.spawn((
@@ -59,6 +65,7 @@ fn setup_ingame_ui(mut commands: Commands) {
             ..Default::default()
         }),
         AdditionalBoostsUi,
+        StateOwner(AppState::Ingame),
     ));
 
     commands.spawn((
@@ -77,6 +84,7 @@ fn setup_ingame_ui(mut commands: Commands) {
             ..Default::default()
         }),
         HighestAltitudeUi,
+        StateOwner(AppState::Ingame),
     ));
 
     commands.spawn((
@@ -95,6 +103,7 @@ fn setup_ingame_ui(mut commands: Commands) {
             ..Default::default()
         }),
         AltitudeUi,
+        StateOwner(AppState::Ingame),
     ));
 }
 

@@ -1,12 +1,19 @@
 use bevy::prelude::*;
 
-use crate::{coin::Coin, physics::RelativeCoinY};
+use crate::{
+    app_state::{AppState, StateOwner},
+    coin::Coin,
+    physics::RelativeCoinY,
+};
 
 pub struct CloudPlugin;
 
 impl Plugin for CloudPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (init_clouds, check_cloud_coin_collision));
+        app.add_systems(
+            Update,
+            (init_clouds, check_cloud_coin_collision).run_if(in_state(AppState::Ingame)),
+        );
     }
 }
 
@@ -52,6 +59,7 @@ fn init_clouds(mut commands: Commands, query: Query<(&InitCloud, Entity)>) {
             },
             RelativeCoinY,
             Cloud::default(),
+            StateOwner(AppState::Ingame),
         ));
     });
 }

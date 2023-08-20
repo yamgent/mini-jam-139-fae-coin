@@ -1,12 +1,19 @@
 use bevy::prelude::*;
 
-use crate::{coin::Coin, physics::RelativeCoinY};
+use crate::{
+    app_state::{AppState, StateOwner},
+    coin::Coin,
+    physics::RelativeCoinY,
+};
 
 pub struct FairyPlugin;
 
 impl Plugin for FairyPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (init_fairies, check_fairy_coin_collision));
+        app.add_systems(
+            Update,
+            (init_fairies, check_fairy_coin_collision).run_if(in_state(AppState::Ingame)),
+        );
     }
 }
 
@@ -44,6 +51,7 @@ fn init_fairies(mut commands: Commands, query: Query<(&InitFairy, Entity)>) {
             },
             RelativeCoinY,
             Fairy,
+            StateOwner(AppState::Ingame),
         ));
     });
 }

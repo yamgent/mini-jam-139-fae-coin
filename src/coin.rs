@@ -1,19 +1,23 @@
 use bevy::prelude::*;
 
+use crate::app_state::{AppState, StateOwner};
+
 pub struct CoinPlugin;
 
 impl Plugin for CoinPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_coin).add_systems(
-            Update,
-            (
-                handle_coin_gravity,
-                do_coin_flip_animation,
-                handle_coin_adjustments,
-                handle_coin_use_boost,
-                calculate_altitude,
-            ),
-        );
+        app.add_systems(OnEnter(AppState::Ingame), setup_coin)
+            .add_systems(
+                Update,
+                (
+                    handle_coin_gravity,
+                    do_coin_flip_animation,
+                    handle_coin_adjustments,
+                    handle_coin_use_boost,
+                    calculate_altitude,
+                )
+                    .run_if(in_state(AppState::Ingame)),
+            );
     }
 }
 
@@ -81,6 +85,7 @@ fn setup_coin(mut commands: Commands) {
             highest_altitude_recorded: 0.0,
         },
         CoinAnimation::default(),
+        StateOwner(AppState::Ingame),
     ));
 }
 

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::coin::Coin;
+use crate::{app_state::AppState, coin::Coin};
 
 pub struct PhysicsPlugin;
 
@@ -8,7 +8,8 @@ impl Plugin for PhysicsPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (update_y_pos_relative_to_coin, despawn_out_of_bounds_things),
+            (update_y_pos_relative_to_coin, despawn_out_of_bounds_things)
+                .run_if(in_state(AppState::Ingame)),
         );
     }
 }

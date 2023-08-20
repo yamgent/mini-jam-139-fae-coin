@@ -1,13 +1,20 @@
 use bevy::prelude::*;
 
-use crate::{boost_item::InitBoostItem, cloud::InitCloud, fairy::InitFairy};
+use crate::{
+    app_state::{AppState, StateOwner},
+    boost_item::InitBoostItem,
+    cloud::InitCloud,
+    fairy::InitFairy,
+};
 
 pub struct LevelPlugin;
 
 impl Plugin for LevelPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(LevelMetadata::default())
-            .add_systems(Update, (spawn_clouds, spawn_boost, spawn_fairy));
+        app.insert_resource(LevelMetadata::default()).add_systems(
+            Update,
+            (spawn_clouds, spawn_boost, spawn_fairy).run_if(in_state(AppState::Ingame)),
+        );
     }
 }
 
@@ -39,7 +46,10 @@ fn spawn_clouds(
     // TODO: Better level design
     if time.elapsed_seconds() - level_metadata.last_cloud_spawn_time > 1.0 {
         level_metadata.last_cloud_spawn_time = time.elapsed_seconds();
-        commands.spawn(InitCloud(Vec2::new(120.0, SPAWN_Y_POS)));
+        commands.spawn((
+            InitCloud(Vec2::new(120.0, SPAWN_Y_POS)),
+            StateOwner(AppState::Ingame),
+        ));
     }
 }
 
@@ -47,7 +57,10 @@ fn spawn_boost(time: Res<Time>, mut level_metadata: ResMut<LevelMetadata>, mut c
     // TODO: Better level design
     if time.elapsed_seconds() - level_metadata.last_boost_spawn_time > 1.0 {
         level_metadata.last_boost_spawn_time = time.elapsed_seconds();
-        commands.spawn(InitBoostItem(Vec2::new(-60.0, SPAWN_Y_POS)));
+        commands.spawn((
+            InitBoostItem(Vec2::new(-60.0, SPAWN_Y_POS)),
+            StateOwner(AppState::Ingame),
+        ));
     }
 }
 
@@ -55,6 +68,9 @@ fn spawn_fairy(time: Res<Time>, mut level_metadata: ResMut<LevelMetadata>, mut c
     // TODO: Better level design
     if time.elapsed_seconds() - level_metadata.last_fairy_spawn_time > 1.0 {
         level_metadata.last_fairy_spawn_time = time.elapsed_seconds();
-        commands.spawn(InitFairy(Vec2::new(0.0, SPAWN_Y_POS)));
+        commands.spawn((
+            InitFairy(Vec2::new(0.0, SPAWN_Y_POS)),
+            StateOwner(AppState::Ingame),
+        ));
     }
 }

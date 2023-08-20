@@ -1,12 +1,19 @@
 use bevy::prelude::*;
 
-use crate::{coin::Coin, physics::RelativeCoinY};
+use crate::{
+    app_state::{AppState, StateOwner},
+    coin::Coin,
+    physics::RelativeCoinY,
+};
 
 pub struct BoostItemPlugin;
 
 impl Plugin for BoostItemPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (init_boost_items, check_boost_item_coin_collision));
+        app.add_systems(
+            Update,
+            (init_boost_items, check_boost_item_coin_collision).run_if(in_state(AppState::Ingame)),
+        );
     }
 }
 
@@ -44,6 +51,7 @@ fn init_boost_items(mut commands: Commands, query: Query<(&InitBoostItem, Entity
             },
             RelativeCoinY,
             BoostItem,
+            StateOwner(AppState::Ingame),
         ));
     });
 }

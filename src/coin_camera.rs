@@ -1,13 +1,19 @@
 use bevy::prelude::*;
 
-use crate::coin::Coin;
+use crate::{
+    app_state::{AppState, StateOwner},
+    coin::Coin,
+};
 
 pub struct CoinCameraPlugin;
 
 impl Plugin for CoinCameraPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_coin_camera)
-            .add_systems(Update, pan_camera_with_coin_speed);
+        app.add_systems(OnEnter(AppState::Ingame), setup_coin_camera)
+            .add_systems(
+                Update,
+                pan_camera_with_coin_speed.run_if(in_state(AppState::Ingame)),
+            );
     }
 }
 
@@ -15,7 +21,11 @@ impl Plugin for CoinCameraPlugin {
 struct CoinCamera;
 
 fn setup_coin_camera(mut commands: Commands) {
-    commands.spawn((Camera2dBundle::default(), CoinCamera));
+    commands.spawn((
+        Camera2dBundle::default(),
+        CoinCamera,
+        StateOwner(AppState::Ingame),
+    ));
 }
 
 // TODO: Related to screen bounds?
