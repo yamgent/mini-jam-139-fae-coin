@@ -14,7 +14,7 @@ impl Plugin for MainMenuUiPlugin {
     }
 }
 
-pub const BACKGROUND_COLOR: Color = Color::rgb(40.0 / 255.0, 40.0 / 255.0, 63.0 / 255.0);
+const BACKGROUND_COLOR: Color = Color::rgb(40.0 / 255.0, 40.0 / 255.0, 63.0 / 255.0);
 
 fn setup_main_menu_ui(
     mut commands: Commands,
@@ -76,7 +76,7 @@ fn setup_main_menu_ui(
                         "Coin in the Sky",
                         TextStyle {
                             font_size: 48.0,
-                            color: Color::WHITE,
+                            color: Color::CYAN,
                             ..Default::default()
                         },
                     ));
@@ -86,7 +86,7 @@ fn setup_main_menu_ui(
                 "Flip your coin into the sky, and maintain it as high as possible!",
                 TextStyle {
                     font: font_assets.font_fira.clone(),
-                    font_size: 20.0,
+                    font_size: 28.0,
                     color: Color::WHITE,
                     ..Default::default()
                 },
@@ -175,7 +175,7 @@ fn setup_main_menu_ui(
                 "Press [SPACE] to start",
                 TextStyle {
                     font: font_assets.font_fira.clone(),
-                    font_size: 24.0,
+                    font_size: 32.0,
                     color: Color::GREEN,
                     ..Default::default()
                 },
