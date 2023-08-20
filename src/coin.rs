@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::app_state::{AppState, StateOwner};
+use crate::{
+    app_state::{AppState, StateOwner},
+    scores::Scores,
+};
 
 pub struct CoinPlugin;
 
@@ -15,6 +18,7 @@ impl Plugin for CoinPlugin {
                     handle_coin_adjustments,
                     handle_coin_use_boost,
                     calculate_altitude,
+                    check_game_over,
                 )
                     .run_if(in_state(AppState::Ingame)),
             );
@@ -183,4 +187,19 @@ fn calculate_altitude(time: Res<Time>, mut query: Query<&mut Coin>) {
         coin.altitude += coin.speed * time.delta_seconds();
         coin.highest_altitude_recorded = coin.highest_altitude_recorded.max(coin.altitude);
     });
+}
+
+const COIN_LOSE_SPEED: f32 = -400.0;
+
+fn check_game_over(
+    query: Query<&Coin>,
+    mut next_state: ResMut<NextState<AppState>>,
+    mut scores: ResMut<Scores>,
+) {
+    let coin = query.single();
+
+    if coin.speed < COIN_LOSE_SPEED {
+        scores.register_score((coin.highest_altitude_recorded.ceil() as i32) / 10);
+        next_state.set(AppState::End);
+    }
 }
