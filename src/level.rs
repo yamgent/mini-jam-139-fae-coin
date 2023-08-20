@@ -8,6 +8,7 @@ use crate::{
     coin::Coin,
     coin_camera::{COIN_SCREEN_BOUNDS_X, COIN_SCREEN_BOUNDS_Y},
     fairy::InitFairy,
+    math::lerp,
 };
 
 pub struct LevelPlugin;
@@ -45,10 +46,6 @@ fn reset_level_metadata(mut level_metadata: ResMut<LevelMetadata>) {
 }
 
 const SPAWN_Y_POS: f32 = COIN_SCREEN_BOUNDS_Y * 2.0;
-
-fn lerp(a: f32, b: f32, val: f32) -> f32 {
-    a + (b - a) * val
-}
 
 fn lvl(alt: f32, values: [f32; 5]) -> f32 {
     const LEVELS: [f32; 4] = [250.0, 500.0, 1000.0, 2000.0];

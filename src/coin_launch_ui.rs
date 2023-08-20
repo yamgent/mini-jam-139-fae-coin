@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{core_pipeline::clear_color::ClearColorConfig, prelude::*};
 
 use crate::app_state::{AppState, StateOwner};
 
@@ -33,8 +33,19 @@ const SPEED_BAR_TOP: f32 = 32.0;
 
 const SPEED_INDICATOR_HEIGHT: f32 = 16.0;
 
+pub const SKY_COLOR: Color = Color::rgb(145.0 / 255.0, 142.0 / 255.0, 229.0 / 255.0);
+
 fn setup_coin_launch_ui(mut commands: Commands) {
-    commands.spawn((Camera2dBundle::default(), StateOwner(AppState::CoinLaunch)));
+    commands.spawn((
+        Camera2dBundle {
+            camera_2d: Camera2d {
+                clear_color: ClearColorConfig::Custom(SKY_COLOR),
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        StateOwner(AppState::CoinLaunch),
+    ));
 
     commands.spawn((
         NodeBundle {

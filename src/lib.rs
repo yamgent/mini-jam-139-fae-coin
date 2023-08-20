@@ -13,6 +13,7 @@ mod ingame_ui;
 mod level;
 mod loading_ui;
 mod main_menu_ui;
+mod math;
 mod physics;
 mod scores;
 
