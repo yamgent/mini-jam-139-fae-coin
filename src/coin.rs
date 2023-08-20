@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     app_state::{AppState, StateOwner},
+    coin_camera::COIN_SCREEN_BOUNDS_X,
     coin_launch_ui::CoinLaunchSpeedPercentage,
     scores::Scores,
 };
@@ -145,8 +146,6 @@ fn do_coin_flip_animation(
 
 const COIN_ADJUSTMENT_X_SPEED: f32 = 150.0;
 const COIN_ADJUSTMENT_Y_SPEED_PENALTY: f32 = 200.0;
-// TODO: Related to screen bounds?
-const COIN_X_BOUND: f32 = 200.0;
 
 fn handle_coin_adjustments(
     time: Res<Time>,
@@ -164,7 +163,11 @@ fn handle_coin_adjustments(
 
     query.for_each_mut(|(mut transform, mut coin)| {
         transform.translation.x += direction * COIN_ADJUSTMENT_X_SPEED * time.delta_seconds();
-        transform.translation.x = transform.translation.x.max(-COIN_X_BOUND).min(COIN_X_BOUND);
+        transform.translation.x = transform
+            .translation
+            .x
+            .max(-COIN_SCREEN_BOUNDS_X)
+            .min(COIN_SCREEN_BOUNDS_X);
         coin.speed -= COIN_ADJUSTMENT_Y_SPEED_PENALTY * time.delta_seconds();
     });
 }

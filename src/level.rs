@@ -5,6 +5,7 @@ use crate::{
     boost_item::InitBoostItem,
     cloud::InitCloud,
     coin::Coin,
+    coin_camera::COIN_SCREEN_BOUNDS_Y,
     fairy::InitFairy,
 };
 
@@ -36,8 +37,7 @@ impl Default for LevelMetadata {
     }
 }
 
-// TODO: Related to screen bounds
-const SPAWN_Y_POS: f32 = 800.0;
+const SPAWN_Y_POS: f32 = COIN_SCREEN_BOUNDS_Y * 2.0;
 
 fn spawn_clouds(
     mut commands: Commands,

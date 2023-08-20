@@ -28,8 +28,10 @@ fn setup_coin_camera(mut commands: Commands) {
     ));
 }
 
-// TODO: Related to screen bounds?
-const CAMERA_PAN_Y_DIST: f32 = 150.0;
+pub const COIN_SCREEN_BOUNDS_X: f32 = 200.0;
+pub const COIN_SCREEN_BOUNDS_Y: f32 = 350.0;
+
+const CAMERA_PAN_Y_DIST: f32 = COIN_SCREEN_BOUNDS_Y - 200.0;
 
 fn pan_camera_with_coin_speed(
     time: Res<Time>,

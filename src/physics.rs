@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{app_state::AppState, coin::Coin};
+use crate::{app_state::AppState, coin::Coin, coin_camera::COIN_SCREEN_BOUNDS_Y};
 
 pub struct PhysicsPlugin;
 
@@ -34,8 +34,7 @@ fn update_y_pos_relative_to_coin(
     });
 }
 
-// TODO: Related to screen bounds
-const OUT_OF_BOUNDS_Y: f32 = -10000.0;
+const OUT_OF_BOUNDS_Y: f32 = COIN_SCREEN_BOUNDS_Y * -10.0;
 
 fn despawn_out_of_bounds_things(
     mut commands: Commands,
