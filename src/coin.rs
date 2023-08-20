@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     app_state::{AppState, StateOwner},
+    coin_launch_ui::CoinLaunchSpeedPercentage,
     scores::Scores,
 };
 
@@ -71,8 +72,10 @@ impl Default for CoinAnimation {
 const GRAVITY: f32 = 98.0;
 // TODO: Actual sprite and size
 const COIN_FULL_SIZE: Vec2 = Vec2::new(50.0, 50.0);
+const COIN_MIN_START_SPEED: f32 = 400.0;
+const COIN_MAX_START_SPEED: f32 = 1400.0;
 
-fn setup_coin(mut commands: Commands) {
+fn setup_coin(mut commands: Commands, launch_speed_percentage: Res<CoinLaunchSpeedPercentage>) {
     commands.spawn((
         SpriteBundle {
             sprite: Sprite {
@@ -83,7 +86,8 @@ fn setup_coin(mut commands: Commands) {
             ..Default::default()
         },
         Coin {
-            speed: 1400.0,
+            speed: COIN_MIN_START_SPEED
+                + (COIN_MAX_START_SPEED - COIN_MIN_START_SPEED) * launch_speed_percentage.0,
             additional_boosts: 3,
             altitude: 0.0,
             highest_altitude_recorded: 0.0,

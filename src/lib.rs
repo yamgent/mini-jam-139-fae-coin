@@ -3,6 +3,7 @@ mod boost_item;
 mod cloud;
 mod coin;
 mod coin_camera;
+mod coin_launch_ui;
 mod end_ui;
 mod fairy;
 mod ingame_ui;
@@ -16,6 +17,7 @@ use boost_item::BoostItemPlugin;
 use cloud::CloudPlugin;
 use coin::CoinPlugin;
 use coin_camera::CoinCameraPlugin;
+use coin_launch_ui::CoinLaunchUiPlugin;
 use end_ui::EndUiPlugin;
 use fairy::FairyPlugin;
 use ingame_ui::IngameUiPlugin;
@@ -38,6 +40,7 @@ pub fn run() {
             FairyPlugin,
             EndUiPlugin,
             ScoresPlugin,
+            CoinLaunchUiPlugin,
         ))
         .run();
 }

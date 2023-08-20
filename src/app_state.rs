@@ -5,6 +5,7 @@ pub struct AppStatePlugin;
 #[derive(Default, States, Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub enum AppState {
     #[default]
+    CoinLaunch,
     Ingame,
     End,
 }
@@ -15,6 +16,7 @@ pub struct StateOwner(pub AppState);
 impl Plugin for AppStatePlugin {
     fn build(&self, app: &mut App) {
         app.add_state::<AppState>()
+            .add_systems(OnExit(AppState::CoinLaunch), remove_coin_launch)
             .add_systems(OnExit(AppState::Ingame), remove_ingame)
             .add_systems(OnExit(AppState::End), remove_end);
     }
@@ -30,6 +32,10 @@ fn remove_entities(
             commands.get_entity(entity).unwrap().despawn_recursive();
         }
     });
+}
+
+fn remove_coin_launch(mut commands: Commands, query: Query<(Entity, &StateOwner)>) {
+    remove_entities(&mut commands, &query, AppState::CoinLaunch);
 }
 
 fn remove_ingame(mut commands: Commands, query: Query<(Entity, &StateOwner)>) {
