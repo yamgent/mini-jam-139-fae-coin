@@ -8,6 +8,8 @@ mod end_ui;
 mod fairy;
 mod ingame_ui;
 mod level;
+mod loading_ui;
+mod main_menu_ui;
 mod physics;
 mod scores;
 
@@ -22,6 +24,8 @@ use end_ui::EndUiPlugin;
 use fairy::FairyPlugin;
 use ingame_ui::IngameUiPlugin;
 use level::LevelPlugin;
+use loading_ui::LoadingUiPlugin;
+use main_menu_ui::MainMenuUiPlugin;
 use physics::PhysicsPlugin;
 use scores::ScoresPlugin;
 
@@ -29,8 +33,11 @@ pub fn run() {
     App::new()
         .add_plugins((
             DefaultPlugins,
-            PhysicsPlugin,
             AppStatePlugin,
+            LoadingUiPlugin,
+            MainMenuUiPlugin,
+            CoinLaunchUiPlugin,
+            PhysicsPlugin,
             CoinPlugin,
             CoinCameraPlugin,
             CloudPlugin,
@@ -40,7 +47,6 @@ pub fn run() {
             FairyPlugin,
             EndUiPlugin,
             ScoresPlugin,
-            CoinLaunchUiPlugin,
         ))
         .run();
 }
