@@ -1,6 +1,9 @@
 use bevy::{core_pipeline::clear_color::ClearColorConfig, prelude::*};
 
-use crate::app_state::{AppState, StateOwner};
+use crate::{
+    app_state::{AppState, StateOwner},
+    game_assets::TextureAssets,
+};
 
 pub struct CoinLaunchUiPlugin;
 
@@ -35,7 +38,7 @@ const SPEED_INDICATOR_HEIGHT: f32 = 16.0;
 
 pub const SKY_COLOR: Color = Color::rgb(145.0 / 255.0, 142.0 / 255.0, 229.0 / 255.0);
 
-fn setup_coin_launch_ui(mut commands: Commands) {
+fn setup_coin_launch_ui(mut commands: Commands, texture_assets: Res<TextureAssets>) {
     commands.spawn((
         Camera2dBundle {
             camera_2d: Camera2d {
@@ -77,6 +80,15 @@ fn setup_coin_launch_ui(mut commands: Commands) {
             ..Default::default()
         },
         SpeedIndicatorUi,
+        StateOwner(AppState::CoinLaunch),
+    ));
+
+    commands.spawn((
+        SpriteBundle {
+            texture: texture_assets.texture_launcher.clone(),
+            transform: Transform::from_translation(Vec3::new(0.0, -240.0, 2.0)),
+            ..Default::default()
+        },
         StateOwner(AppState::CoinLaunch),
     ));
 }

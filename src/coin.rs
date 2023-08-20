@@ -5,6 +5,7 @@ use crate::{
     coin_camera::COIN_SCREEN_BOUNDS_X,
     coin_launch_ui::CoinLaunchSpeedPercentage,
     game_assets::TextureAssets,
+    physics::RelativeCoinY,
     scores::Scores,
 };
 
@@ -12,7 +13,7 @@ pub struct CoinPlugin;
 
 impl Plugin for CoinPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(AppState::Ingame), setup_coin)
+        app.add_systems(OnEnter(AppState::Ingame), (setup_coin, setup_launcher))
             .add_systems(
                 Update,
                 (
@@ -94,6 +95,18 @@ fn setup_coin(
             highest_altitude_recorded: 0.0,
         },
         CoinAnimation::default(),
+        StateOwner(AppState::Ingame),
+    ));
+}
+
+fn setup_launcher(mut commands: Commands, texture_assets: Res<TextureAssets>) {
+    commands.spawn((
+        SpriteBundle {
+            texture: texture_assets.texture_launcher.clone(),
+            transform: Transform::from_translation(Vec3::new(0.0, -240.0, 2.0)),
+            ..Default::default()
+        },
+        RelativeCoinY,
         StateOwner(AppState::Ingame),
     ));
 }

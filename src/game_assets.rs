@@ -26,4 +26,6 @@ pub struct TextureAssets {
     pub texture_fairy: Handle<Image>,
     #[asset(path = "textures/glow.png")]
     pub texture_glow: Handle<Image>,
+    #[asset(path = "textures/launcher.png")]
+    pub texture_launcher: Handle<Image>,
 }
