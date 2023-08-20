@@ -4,6 +4,7 @@ use crate::{
     app_state::{AppState, StateOwner},
     boost_item::InitBoostItem,
     cloud::InitCloud,
+    coin::Coin,
     fairy::InitFairy,
 };
 
@@ -20,17 +21,17 @@ impl Plugin for LevelPlugin {
 
 #[derive(Resource)]
 struct LevelMetadata {
-    last_cloud_spawn_time: f32,
-    last_boost_spawn_time: f32,
-    last_fairy_spawn_time: f32,
+    next_cloud_spawn_altitude: f32,
+    next_boost_spawn_altitude: f32,
+    next_fairy_spawn_altitude: f32,
 }
 
 impl Default for LevelMetadata {
     fn default() -> Self {
         Self {
-            last_cloud_spawn_time: 0.0,
-            last_boost_spawn_time: 0.0,
-            last_fairy_spawn_time: 0.0,
+            next_cloud_spawn_altitude: SPAWN_Y_POS * 2.0,
+            next_boost_spawn_altitude: SPAWN_Y_POS * 3.0,
+            next_fairy_spawn_altitude: SPAWN_Y_POS * 1.5,
         }
     }
 }
@@ -39,38 +40,52 @@ impl Default for LevelMetadata {
 const SPAWN_Y_POS: f32 = 800.0;
 
 fn spawn_clouds(
-    time: Res<Time>,
-    mut level_metadata: ResMut<LevelMetadata>,
     mut commands: Commands,
+    mut level_metadata: ResMut<LevelMetadata>,
+    coin_query: Query<&Coin>,
 ) {
-    // TODO: Better level design
-    if time.elapsed_seconds() - level_metadata.last_cloud_spawn_time > 1.0 {
-        level_metadata.last_cloud_spawn_time = time.elapsed_seconds();
+    let coin = coin_query.single();
+
+    if level_metadata.next_cloud_spawn_altitude < coin.altitude {
         commands.spawn((
             InitCloud(Vec2::new(120.0, SPAWN_Y_POS)),
             StateOwner(AppState::Ingame),
         ));
+
+        level_metadata.next_cloud_spawn_altitude += SPAWN_Y_POS * 2.0;
     }
 }
 
-fn spawn_boost(time: Res<Time>, mut level_metadata: ResMut<LevelMetadata>, mut commands: Commands) {
+fn spawn_boost(
+    mut commands: Commands,
+    mut level_metadata: ResMut<LevelMetadata>,
+    coin_query: Query<&Coin>,
+) {
+    let coin = coin_query.single();
+
     // TODO: Better level design
-    if time.elapsed_seconds() - level_metadata.last_boost_spawn_time > 1.0 {
-        level_metadata.last_boost_spawn_time = time.elapsed_seconds();
+    if level_metadata.next_boost_spawn_altitude < coin.altitude {
         commands.spawn((
             InitBoostItem(Vec2::new(-60.0, SPAWN_Y_POS)),
             StateOwner(AppState::Ingame),
         ));
+        level_metadata.next_boost_spawn_altitude += SPAWN_Y_POS * 3.0;
     }
 }
 
-fn spawn_fairy(time: Res<Time>, mut level_metadata: ResMut<LevelMetadata>, mut commands: Commands) {
+fn spawn_fairy(
+    mut commands: Commands,
+    mut level_metadata: ResMut<LevelMetadata>,
+    coin_query: Query<&Coin>,
+) {
+    let coin = coin_query.single();
+
     // TODO: Better level design
-    if time.elapsed_seconds() - level_metadata.last_fairy_spawn_time > 1.0 {
-        level_metadata.last_fairy_spawn_time = time.elapsed_seconds();
+    if level_metadata.next_fairy_spawn_altitude < coin.altitude {
         commands.spawn((
             InitFairy(Vec2::new(0.0, SPAWN_Y_POS)),
             StateOwner(AppState::Ingame),
         ));
+        level_metadata.next_fairy_spawn_altitude += SPAWN_Y_POS * 3.0;
     }
 }
