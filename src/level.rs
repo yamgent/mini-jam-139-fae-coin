@@ -33,9 +33,9 @@ struct LevelMetadata {
 impl Default for LevelMetadata {
     fn default() -> Self {
         Self {
-            next_cloud_spawn_altitude: SPAWN_Y_POS * 2.0,
-            next_boost_spawn_altitude: SPAWN_Y_POS * 3.0,
-            next_fairy_spawn_altitude: SPAWN_Y_POS * 1.5,
+            next_fairy_spawn_altitude: SPAWN_Y_POS * 0.5,
+            next_cloud_spawn_altitude: SPAWN_Y_POS * 1.0,
+            next_boost_spawn_altitude: SPAWN_Y_POS * 1.5,
         }
     }
 }
@@ -51,7 +51,7 @@ fn lerp(a: f32, b: f32, val: f32) -> f32 {
 }
 
 fn lvl(alt: f32, values: [f32; 5]) -> f32 {
-    const LEVELS: [f32; 4] = [500.0, 1000.0, 2000.0, 4000.0];
+    const LEVELS: [f32; 4] = [250.0, 500.0, 1000.0, 2000.0];
 
     *LEVELS
         .iter()
@@ -117,7 +117,7 @@ fn spawn_boost(
                 StateOwner(AppState::Ingame),
             ));
         });
-        level_metadata.next_boost_spawn_altitude += SPAWN_Y_POS * 3.0;
+        level_metadata.next_boost_spawn_altitude += SPAWN_Y_POS * 1.0;
     }
 }
 
@@ -150,6 +150,6 @@ fn spawn_fairy(
             });
         }
 
-        level_metadata.next_fairy_spawn_altitude += SPAWN_Y_POS * 3.0;
+        level_metadata.next_fairy_spawn_altitude += SPAWN_Y_POS * 1.0;
     }
 }

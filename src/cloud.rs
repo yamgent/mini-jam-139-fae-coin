@@ -64,7 +64,7 @@ fn init_clouds(mut commands: Commands, query: Query<(&InitCloud, Entity)>) {
     });
 }
 
-const CLOUD_SLOW_DOWN_PENALTY: f32 = 400.0;
+const CLOUD_SLOW_DOWN_PENALTY: f32 = 200.0;
 
 fn check_cloud_coin_collision(
     mut coin_query: Query<(&mut Coin, &Transform)>,

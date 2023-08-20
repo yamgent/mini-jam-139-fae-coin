@@ -144,8 +144,8 @@ fn do_coin_flip_animation(
     });
 }
 
-const COIN_ADJUSTMENT_X_SPEED: f32 = 150.0;
-const COIN_ADJUSTMENT_Y_SPEED_PENALTY: f32 = 200.0;
+const COIN_ADJUSTMENT_X_SPEED: f32 = 200.0;
+const COIN_ADJUSTMENT_Y_SPEED_PENALTY: f32 = 90.0;
 
 fn handle_coin_adjustments(
     time: Res<Time>,
