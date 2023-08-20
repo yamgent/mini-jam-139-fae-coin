@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use iyes_progress::ProgressCounter;
 
 use crate::app_state::{AppState, StateOwner};
 
@@ -13,6 +14,9 @@ impl Plugin for LoadingUiPlugin {
             );
     }
 }
+
+#[derive(Component)]
+struct LoadingTextUi;
 
 fn setup_loading_ui(mut commands: Commands) {
     commands.spawn((Camera2dBundle::default(), StateOwner(AppState::Loading)));
@@ -33,18 +37,34 @@ fn setup_loading_ui(mut commands: Commands) {
             StateOwner(AppState::Loading),
         ))
         .with_children(|parent| {
-            parent.spawn(TextBundle::from_section(
-                "Loading: 0/0",
-                TextStyle {
-                    font_size: 32.0,
-                    color: Color::GREEN,
-                    ..Default::default()
-                },
+            parent.spawn((
+                TextBundle::from_section(
+                    "Loading: 0/0",
+                    TextStyle {
+                        font_size: 32.0,
+                        color: Color::GREEN,
+                        ..Default::default()
+                    },
+                ),
+                LoadingTextUi,
             ));
         });
 }
 
-fn update_loading_ui(mut next_state: ResMut<NextState<AppState>>) {
-    // TODO: Actual code
-    next_state.set(AppState::MainMenu);
+fn update_loading_ui(
+    progress: Option<Res<ProgressCounter>>,
+    mut last_done: Local<u32>,
+    mut last_total: Local<u32>,
+    mut query: Query<&mut Text, With<LoadingTextUi>>,
+) {
+    if let Some(progress) = progress.map(|counter| counter.progress()) {
+        if progress.done > *last_done || progress.total != *last_total {
+            *last_done = progress.done;
+            *last_total = progress.total;
+
+            query.for_each_mut(|mut text| {
+                text.sections[0].value = format!("Loading: {}/{}", progress.done, progress.total);
+            });
+        }
+    }
 }

@@ -4,6 +4,7 @@ use crate::{
     app_state::{AppState, StateOwner},
     coin_camera::COIN_SCREEN_BOUNDS_X,
     coin_launch_ui::CoinLaunchSpeedPercentage,
+    game_assets::TextureAssets,
     scores::Scores,
 };
 
@@ -71,19 +72,18 @@ impl Default for CoinAnimation {
 }
 
 const GRAVITY: f32 = 98.0;
-// TODO: Actual sprite and size
 const COIN_FULL_SIZE: Vec2 = Vec2::new(50.0, 50.0);
 const COIN_MIN_START_SPEED: f32 = 400.0;
 const COIN_MAX_START_SPEED: f32 = 1400.0;
 
-fn setup_coin(mut commands: Commands, launch_speed_percentage: Res<CoinLaunchSpeedPercentage>) {
+fn setup_coin(
+    mut commands: Commands,
+    launch_speed_percentage: Res<CoinLaunchSpeedPercentage>,
+    texture_assets: Res<TextureAssets>,
+) {
     commands.spawn((
         SpriteBundle {
-            sprite: Sprite {
-                color: Color::GREEN,
-                custom_size: Some(COIN_FULL_SIZE),
-                ..Default::default()
-            },
+            texture: texture_assets.texture_coin.clone(),
             ..Default::default()
         },
         Coin {

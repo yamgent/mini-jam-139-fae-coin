@@ -7,6 +7,7 @@ mod coin_camera;
 mod coin_launch_ui;
 mod end_ui;
 mod fairy;
+mod game_assets;
 mod ingame_ui;
 mod level;
 mod loading_ui;
@@ -24,6 +25,7 @@ use coin_camera::CoinCameraPlugin;
 use coin_launch_ui::CoinLaunchUiPlugin;
 use end_ui::EndUiPlugin;
 use fairy::FairyPlugin;
+use game_assets::GameAssetsPlugin;
 use ingame_ui::IngameUiPlugin;
 use level::LevelPlugin;
 use loading_ui::LoadingUiPlugin;
@@ -34,21 +36,26 @@ use scores::ScoresPlugin;
 pub fn run() {
     App::new()
         .add_plugins((
-            CorePlugin,
-            AppStatePlugin,
-            LoadingUiPlugin,
-            MainMenuUiPlugin,
-            CoinLaunchUiPlugin,
-            PhysicsPlugin,
-            CoinPlugin,
-            CoinCameraPlugin,
-            CloudPlugin,
-            LevelPlugin,
-            IngameUiPlugin,
-            BoostItemPlugin,
-            FairyPlugin,
-            EndUiPlugin,
-            ScoresPlugin,
+            (
+                CorePlugin,
+                AppStatePlugin,
+                LoadingUiPlugin,
+                GameAssetsPlugin,
+                MainMenuUiPlugin,
+            ),
+            (
+                CoinLaunchUiPlugin,
+                PhysicsPlugin,
+                CoinPlugin,
+                CoinCameraPlugin,
+                CloudPlugin,
+                LevelPlugin,
+                IngameUiPlugin,
+                BoostItemPlugin,
+                FairyPlugin,
+                EndUiPlugin,
+                ScoresPlugin,
+            ),
         ))
         .run();
 }
