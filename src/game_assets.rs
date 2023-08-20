@@ -28,4 +28,9 @@ pub struct TextureAssets {
     pub texture_glow: Handle<Image>,
     #[asset(path = "textures/launcher.png")]
     pub texture_launcher: Handle<Image>,
+
+    #[asset(path = "textures/launch_bar.png")]
+    pub texture_launch_bar: Handle<Image>,
+    #[asset(path = "textures/launch_arrow.png")]
+    pub texture_launch_arrow: Handle<Image>,
 }

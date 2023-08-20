@@ -63,6 +63,7 @@ fn setup_coin_launch_ui(mut commands: Commands, texture_assets: Res<TextureAsset
             background_color: Color::WHITE.into(),
             ..Default::default()
         },
+        UiImage::new(texture_assets.texture_launch_bar.clone()),
         StateOwner(AppState::CoinLaunch),
     ));
 
@@ -80,6 +81,7 @@ fn setup_coin_launch_ui(mut commands: Commands, texture_assets: Res<TextureAsset
             ..Default::default()
         },
         SpeedIndicatorUi,
+        UiImage::new(texture_assets.texture_launch_arrow.clone()),
         StateOwner(AppState::CoinLaunch),
     ));
 
