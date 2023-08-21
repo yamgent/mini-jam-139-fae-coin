@@ -11,6 +11,9 @@ on:
         required: true
         type: string
 
+env:
+  GAME_EXECUTABLE_NAME: mini_jam_139_fae_coin
+
 permissions:
   contents: write
 
